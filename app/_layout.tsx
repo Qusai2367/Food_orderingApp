@@ -1,24 +1,27 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import "./global.css"
+import {
+    SplashScreen,
+    Stack
+} from "expo-router";
+import {
+    useFonts
+} from "expo-font";
+import {
+    useEffect
+} from "react";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    const [fontsLoaded, error] = useFonts({
+        "Quicksand-bold": require('../assets/fonts/Quicksand-Bold.ttf'),
+        "Quicksand-medium": require('../assets/fonts/Quicksand-Medium.ttf'),
+        "Quicksand-regular": require('../assets/fonts/Quicksand-Regular.ttf'),
+        "Quicksand-light": require('../assets/fonts/Quicksand-Light.ttf'),
+        "Quicksand-semiBlod": require('../assets/fonts/Quicksand-SemiBold.ttf'),
+    })
+    useEffect(() => {
+        if(error) throw error;
+        if(fontsLoaded) SplashScreen.hideAsync();
+    }, [fontsLoaded,error])
+  return <Stack screenOptions = {{headerShown: false}}/>;
 }
